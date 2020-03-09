@@ -33,3 +33,43 @@ func (a *Arrayf64) Var() float64 {
 func (a *Arrayf64) Stddev() float64 {
 	return math.Sqrt(a.Var())
 }
+
+// IQR returns the Interquartile range of the data array
+// Algorithm:
+//		q3 - q1
+//
+// Complexity:
+// =	2 quantile + 1 float64-float64 substraction
+// ~	2 * O(1) + O(1)
+// ~	O(1)
+//
+func (a *Arrayf64) IQR() float64 {
+	return a.Quantile(.75) - a.Quantile(.25)
+}
+
+// Midhinge returns the Midhinge of the data array
+// Algorithm:
+//		(q1 + q3)/2
+//
+// Complexity:
+// =	2 quantile + 1 float64-float64 division + 1 float64-float64 addition
+// ~	2 * O(1) + O(1) + O(1)
+// ~	O(1)
+//
+func (a *Arrayf64) Midhinge() float64 {
+	return (a.Quantile(.25) + a.Quantile(.75)) / 2
+}
+
+// Trimean returns the Trimean of the data array
+// Algorithm:
+//		(q2 + midhinge)/2
+//
+// Complexity:
+// =	1 quantile + 1 midhinge +
+//      1 float64-float64 division + 1 float64-float64 addition
+// ~	O(1) + O(1) + O(1) + O(1)
+// ~	O(1)
+//
+func (a *Arrayf64) Trimean() float64 {
+	return (a.Quantile(.5) + a.Midhinge()) / 2
+}

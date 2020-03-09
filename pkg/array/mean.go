@@ -28,7 +28,11 @@ func geometricAdd(agg float64, val float64) float64 {
 }
 
 // GeometricMean returns the geometric mean of the data set
-// Complexity: O(n)
+// Algorithm:
+//			Π(i = 0; i < n; i++)(x_i) / n
+// Complexity:
+//		Recomputation: O(n)
+//		Iterative computation: O(1)
 //
 func (a *Arrayf64) GeometricMean(recompute bool) float64 {
 	if a.Option.Geometric {
@@ -57,7 +61,11 @@ func harmonicAdd(agg float64, val float64) float64 {
 }
 
 // HarmonicMean returns the harmonic mean of the data set
-// Complexity: O(n)
+// Algorithm:
+//			Σ(i = 0; i < n; i++)(1 / x_i) / n
+// Complexity:
+//		Recomputation: O(n)
+//		Iterative computation: O(1)
 //
 func (a *Arrayf64) HarmonicMean(recompute bool) float64 {
 	if a.Option.Harmonic {
