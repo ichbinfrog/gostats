@@ -15,8 +15,19 @@ func init() {
 
 func populate(a *Arrayf64, n int) {
 	for i := 0; i <= n; i++ {
-		a.Insert(rand.Float64())
+		a.Insert(rand.Float64() * 10)
 	}
+}
+
+func TestSigmoid(b *testing.T) {
+	a := Arrayf64{}
+	a.Init(Optionf64{
+		Degree: 4,
+	})
+	populate(&a, 100)
+	log.Println(a.Data)
+	na := a.Sigmoid(false)
+	log.Println(na)
 }
 
 func TestAggregate(b *testing.T) {

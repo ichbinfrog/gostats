@@ -158,6 +158,8 @@ func (a *Arrayf64) DeepCopy() *Arrayf64 {
 		Option: a.Option,
 		Length: a.Length,
 	}
+	na.Data = make([]float64, int(na.Length))
+	na.Sum = make([]float64, a.Option.Degree)
 	copy(na.Data, a.Data)
 	copy(na.Sum, a.Sum)
 	return na
