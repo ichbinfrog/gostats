@@ -19,9 +19,29 @@ func populate(a *Arrayf64, n int) {
 	}
 }
 
+func TestAggregate(b *testing.T) {
+	a := Arrayf64{}
+	a.Init(Optionf64{
+		Degree:    4,
+		Harmonic:  true,
+		Geometric: true,
+	})
+	a.InsertSlice([]float64{1, 2, 5, 3, 6, 78, 35, 2, 1, 1, 2, 3, 2, 1, 2, 2, 2, 2, 3, 5, 4, 4, 5})
+	log.Println(a.Data)
+	log.Println(a.Aggregate)
+
+	log.Println(a.HarmonicMean(false))
+	a.apply(func(v float64) float64 { return v + 10 }, true)
+	log.Println(a.Data)
+
+	log.Println(a.HarmonicMean(false))
+}
+
 func TestArray(b *testing.T) {
 	a := Arrayf64{}
-	a.Init(4)
+	a.Init(Optionf64{
+		Degree: 4,
+	})
 	populate(&a, 1000)
 	log.Printf("%+v\n", a.Summary())
 	a.Center(true)
@@ -33,7 +53,9 @@ func TestArray(b *testing.T) {
 func BenchmarkArraySummary(b *testing.B) {
 	for i := 1; i < 8; i++ {
 		a := Arrayf64{}
-		a.Init(2)
+		a.Init(Optionf64{
+			Degree: 4,
+		})
 
 		populate(&a, int(math.Pow(10, float64(i))))
 		b.ResetTimer()
@@ -53,7 +75,9 @@ func BenchmarkArrayApply(b *testing.B) {
 	for name, funct := range functions {
 		for i := 1; i <= 5; i++ {
 			a := Arrayf64{}
-			a.Init(2)
+			a.Init(Optionf64{
+				Degree: 2,
+			})
 
 			populate(&a, int(math.Pow(10, float64(i))))
 			b.ResetTimer()
