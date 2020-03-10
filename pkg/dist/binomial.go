@@ -14,13 +14,75 @@ import (
 //		}, k in [0, ..., n]
 //
 type Binomial struct {
-	N    int
-	P, Q float64
+	N, P, Q float64
 }
 
 // Generate creates one sample of the Bernouilli distribution
-func (b *Binomial) Generate() bool {
-	return rand.Float64() < b.P
+func (b *Binomial) Generate() float64 {
+	p := b.P
+	if b.P > .5 {
+		p = b.Q
+	}
+
+	// Direct method
+	if b.N < 25 {
+		bnl := 0.0
+		for i := 1; i <= int(b.N); i++ {
+			if rand.Float64() < p {
+				bnl++
+			}
+		}
+		if p != b.P {
+			return b.N - bnl
+		}
+		return bnl
+	}
+
+	am := float64(b.N) * p
+	// Direct Poisson method
+	if am < 1.0 {
+		g := math.Exp(-am)
+		t := 1.0
+		i := 0.0
+		for {
+			t *= rand.Float64()
+			if t < g || i >= b.N {
+				if p != b.P {
+					return b.N - i
+				}
+				return i
+			}
+			i++
+		}
+	}
+
+	// Rejection method
+	sq := math.Sqrt(2.0 * am * p)
+	oldg, _ := math.Lgamma(b.N + 1.0)
+	plog := math.Log(p)
+	pclog := math.Log(1.0 - p)
+
+	for {
+		var y, em float64
+		for {
+			y = math.Tan(math.Pi * rand.Float64())
+			em = sq*y + am
+			if em >= 0.0 && em < b.N+1 {
+				break
+			}
+		}
+		em = math.Floor(em)
+		lg1, _ := math.Lgamma(em + 1.0)
+		lg2, _ := math.Lgamma(b.N - em + 1.0)
+		t := 1.2 * math.Sqrt(1.0+math.Pow(y, 2)) * math.Exp(oldg-lg1-lg2+em*plog+(b.N-em)*pclog)
+
+		if rand.Float64() <= t {
+			if p != b.P {
+				return b.N - em
+			}
+			return em
+		}
+	}
 }
 
 // BinomialCoeff computes the binomial coeff with the given n, k
@@ -44,7 +106,7 @@ func BinomialCoeff(n, k int) int64 {
 }
 
 // Init intialises a Bernouilli distribution
-func (b *Binomial) Init(n int, p float64) {
+func (b *Binomial) Init(n, p float64) {
 	if p < 0 || p > 1 || n < 0 {
 		panic("")
 	}
@@ -58,7 +120,7 @@ func (b *Binomial) Domain() (float64, float64) {
 
 // PMF returns the probability mass function value of a given k
 func (b *Binomial) PMF(k float64) float64 {
-	return float64(BinomialCoeff(b.N, int(k))) * math.Pow(b.P, k) * math.Pow(b.Q, float64(b.N)-k)
+	return float64(BinomialCoeff(int(b.N), int(k))) * math.Pow(b.P, k) * math.Pow(b.Q, float64(b.N)-k)
 }
 
 // Mean returns the mean of the distribution

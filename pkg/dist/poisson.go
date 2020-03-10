@@ -3,6 +3,7 @@ package dist
 import (
 	"math"
 	"math/big"
+	"math/rand"
 )
 
 // Poisson represents the Poisson distribution
@@ -32,6 +33,46 @@ func Factorial(n int) int64 {
 		r1.Mul(r1, big.NewInt(int64(i)))
 	}
 	return r1.Int64()
+}
+
+// Generate creates one sample of the Poisson distribution
+func (p *Poisson) Generate() float64 {
+	var em, t float64
+
+	// Direct method
+	if p.Lambda < 12 {
+		em = -1
+		t = 1.0
+		for {
+			t *= rand.Float64()
+			if t >= p.Lambda {
+				break
+			}
+			em++
+		}
+		return em
+	}
+
+	// Rejection method
+	sq := math.Sqrt(2.0 * p.Lambda)
+	alxm := math.Log(sq)
+	lg, _ := math.Lgamma(p.Lambda + 1.0)
+	g := p.Lambda*alxm - lg
+
+	for {
+		var y, em float64
+		for {
+			y = math.Tan(math.Pi * rand.Float64())
+			em = sq*y + p.Lambda
+			if em >= 0.0 {
+				break
+			}
+		}
+		em = math.Floor(em)
+		if rand.Float64() <= 0.9*(1.0+math.Pow(y, 2))*math.Exp(em*alxm-lg-g) {
+			return em
+		}
+	}
 }
 
 // Domain returns the definition domain of the distribution
