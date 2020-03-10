@@ -1,6 +1,7 @@
 package dist
 
 import (
+	"fmt"
 	"math"
 	"math/big"
 	"math/rand"
@@ -38,7 +39,7 @@ func (b *Binomial) Generate() float64 {
 		return bnl
 	}
 
-	am := float64(b.N) * p
+	am := b.N * p
 	// Direct Poisson method
 	if am < 1.0 {
 		g := math.Exp(-am)
@@ -159,4 +160,20 @@ func (b *Binomial) Moment(t float64) float64 {
 // FisherI returns the Fisher Information of the distribution
 func (b *Binomial) FisherI() float64 {
 	return float64(b.N) / (b.P * b.Q)
+}
+
+// Summary returns a string summarising basic info about the distribution
+func (b *Binomial) Summary() string {
+	dbeg, dend := b.Domain()
+	return fmt.Sprintf(`
+	X ~ B(%f, %f)
+		Domain:			{ %f , %f }
+		Mean: 			%f
+		Median (upper): %f
+		Median (lower): %f
+		Var: 			%f
+		Skewness: 		%f
+		Kurtosis:		%f
+		FisherInfo:		%f
+`, b.N, b.P, dbeg, dend, b.Mean(), b.Median(true), b.Median(false), b.Var(), b.Skewness(), b.Kurtosis(), b.FisherI())
 }

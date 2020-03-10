@@ -1,6 +1,7 @@
 package dist
 
 import (
+	"fmt"
 	"math"
 	"math/big"
 	"math/rand"
@@ -44,7 +45,7 @@ func (p *Poisson) Generate() float64 {
 		em = -1
 		t = 1.0
 		for {
-			t *= rand.Float64()
+			t += rand.Float64()
 			if t >= p.Lambda {
 				break
 			}
@@ -128,4 +129,20 @@ func (p *Poisson) Moment(t float64) float64 {
 // FisherI returns the Fisher Information of the distribution
 func (p *Poisson) FisherI() float64 {
 	return 1 / p.Lambda
+}
+
+// Summary returns a string summarising basic info about the distribution
+func (p *Poisson) Summary() string {
+	dbeg, dend := p.Domain()
+	return fmt.Sprintf(`
+	X ~ P(%f)
+		Domain:			[ %f , %f [
+		Mean: 			%f
+		Median(upper):	%f
+		Median(lower):	%f
+		Var: 			%f
+		Skewness: 		%f
+		Kurtosis:		%f
+		FisherInfo:		%f
+`, p.Lambda, dbeg, dend, p.Mean(), p.Median(true), p.Median(false), p.Var(), p.Skewness(), p.Kurtosis(), p.FisherI())
 }

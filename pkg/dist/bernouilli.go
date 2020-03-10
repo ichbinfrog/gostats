@@ -1,6 +1,7 @@
 package dist
 
 import (
+	"fmt"
 	"math"
 	"math/rand"
 )
@@ -99,4 +100,20 @@ func (b *Bernouilli) Moment(t float64) float64 {
 // FisherI returns the Fisher Information of the distribution
 func (b *Bernouilli) FisherI() float64 {
 	return 1 / (b.P * b.Q)
+}
+
+// Summary returns a string summarising basic info about the distribution
+func (b *Bernouilli) Summary() string {
+	dbeg, dend := b.Domain()
+	return fmt.Sprintf(`
+	X ~ B(%f)
+		Domain:		{ %f , %f }
+		Mean: 		%f
+		Median: 	%f
+		Var: 		%f
+		Skewness: 	%f
+		Kurtosis:	%f
+		Entropy:	%f
+		FisherInfo:	%f
+`, b.P, dbeg, dend, b.Mean(), b.Median(), b.Var(), b.Skewness(), b.Kurtosis(), b.Entropy(), b.FisherI())
 }

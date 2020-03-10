@@ -1,7 +1,9 @@
 package dist
 
 import (
+	"fmt"
 	"math"
+	"math/rand"
 )
 
 // Polya represents the Polya distribution
@@ -21,6 +23,15 @@ func (p *Polya) Init(r, prob float64) {
 		panic("")
 	}
 	p.R, p.P, p.Q = r, prob, 1-prob
+}
+
+// Generate creates one sample of a geometric distribution
+func (p *Polya) Generate() float64 {
+	sum := 0.0
+	for i := 0.0; i < p.R; i++ {
+		sum += math.Floor(math.Log(rand.Float64()) / math.Log(p.Q))
+	}
+	return sum
 }
 
 // Domain returns the definition domain of the distribution
@@ -72,4 +83,20 @@ func (p *Polya) Moment(t float64) float64 {
 // FisherI returns the Fisher Information of the distribution
 func (p *Polya) FisherI() float64 {
 	return p.R / (p.P * math.Pow(p.Q, 2))
+}
+
+// Summary returns a string summarising basic info about the distribution
+func (p *Polya) Summary() string {
+	dbeg, dend := p.Domain()
+	return fmt.Sprintf(`
+	X ~ P(%f, %f)
+		Domain:			[ %f , %f [
+		Mean: 			%f
+		Median(upper):	%f
+		Median(lower):	%f
+		Var: 			%f
+		Skewness: 		%f
+		Kurtosis:		%f
+		FisherInfo:		%f
+`, p.P, p.R, dbeg, dend, p.Mean(), p.Median(true), p.Median(false), p.Var(), p.Skewness(), p.Kurtosis(), p.FisherI())
 }

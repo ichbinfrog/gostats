@@ -1,7 +1,9 @@
 package dist
 
 import (
+	"fmt"
 	"math"
+	"math/rand"
 )
 
 // Geometric represents a geometric distribution
@@ -13,12 +15,17 @@ type Geometric struct {
 	P, Q float64
 }
 
-// Init intialises a Bernouilli distribution
+// Init intialises a geometric distribution
 func (g *Geometric) Init(p float64) {
 	if p < 0 || p > 1 {
 		panic("")
 	}
 	g.P, g.Q = p, 1-p
+}
+
+// Generate creates one sample of a geometric distribution
+func (g *Geometric) Generate() float64 {
+	return math.Floor(math.Log(rand.Float64()) / math.Log(g.Q))
 }
 
 // Domain returns the definition domain of the distribution
@@ -69,4 +76,19 @@ func (g *Geometric) Entropy() float64 {
 // Moment returns the t-th moment of the distribution
 func (g *Geometric) Moment(t float64) float64 {
 	return (g.P * math.Exp(t)) / (1 - g.Q*math.Exp(t))
+}
+
+// Summary returns a string summarising basic info about the distribution
+func (g *Geometric) Summary() string {
+	dbeg, dend := g.Domain()
+	return fmt.Sprintf(`
+	X ~ G(%f)
+		Domain:			[ %f , %f [
+		Mean: 			%f
+		Median:			%f
+		Var: 			%f
+		Skewness: 		%f
+		Entropy:		%f
+		Kurtosis:		%f
+`, g.P, dbeg, dend, g.Mean(), g.Median(), g.Var(), g.Skewness(), g.Kurtosis(), g.Entropy())
 }

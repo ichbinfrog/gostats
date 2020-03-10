@@ -1,6 +1,7 @@
 package dist
 
 import (
+	"fmt"
 	"math"
 	"math/rand"
 )
@@ -110,4 +111,17 @@ func (g *Gamma) Moment(t float64) float64 {
 		return math.Pow(1-t/g.Beta, -g.Alpha)
 	}
 	return math.NaN()
+}
+
+// Summary returns a string summarising basic info about the distribution
+func (g *Gamma) Summary() string {
+	dbeg, dend := g.Domain()
+	return fmt.Sprintf(`
+	X ~ Γ(%f, %f)
+		Domain:		[ %f , %f [
+		Mean: 		%f
+		Var: 		%f
+		Skewness: 	%f
+		Kurtosis:	%f
+`, g.Alpha, g.Beta, dbeg, dend, g.Mean(), g.Var(), g.Skewness(), g.Kurtosis())
 }

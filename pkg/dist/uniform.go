@@ -1,6 +1,7 @@
 package dist
 
 import (
+	"fmt"
 	"math"
 	"math/rand"
 )
@@ -19,7 +20,7 @@ type Uniform struct {
 
 // Generate creates one sample of the Bernouilli distribution
 func (u *Uniform) Generate() float64 {
-	return rand.Float64()*(u.B-u.A) + u.B
+	return rand.Float64()*(u.B-u.A) + u.A
 }
 
 // Init initialises the uniform distribution
@@ -90,4 +91,19 @@ func (u *Uniform) Moment(t float64) float64 {
 		return 1
 	}
 	return (math.Exp(t*u.B) - math.Exp(t*u.A)) / (t * (u.B - u.A))
+}
+
+// Summary returns a string summarising basic info about the distribution
+func (u *Uniform) Summary() string {
+	dbeg, dend := u.Domain()
+	return fmt.Sprintf(`
+	X ~ U(%f, %f)
+		Domain:		{ %f , %f }
+		Mean: 		%f
+		Median: 	%f
+		Var: 		%f
+		Skewness: 	%f
+		Kurtosis:	%f
+		Entropy:	%f
+`, u.A, u.B, dbeg, dend, u.Mean(), u.Median(), u.Var(), u.Skewness(), u.Kurtosis(), u.Entropy())
 }
