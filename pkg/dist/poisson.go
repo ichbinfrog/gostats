@@ -5,6 +5,8 @@ import (
 	"math"
 	"math/big"
 	"math/rand"
+
+	"github.com/ichbinfrog/statistics/pkg/util"
 )
 
 // Poisson represents the Poisson distribution
@@ -17,11 +19,12 @@ type Poisson struct {
 }
 
 // Init intialises a Bernouilli distribution
-func (p *Poisson) Init(lambda float64) {
+func (p *Poisson) Init(lambda float64) error {
 	if lambda < 0 {
-		panic("")
+		return util.ErrPoissonParam
 	}
 	p.Lambda = lambda
+	return nil
 }
 
 // Factorial computes the binomial coeff with the given n, k

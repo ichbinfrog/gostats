@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"math"
 	"math/rand"
+
+	"github.com/ichbinfrog/statistics/pkg/util"
 )
 
 // Geometric represents a geometric distribution
@@ -16,11 +18,12 @@ type Geometric struct {
 }
 
 // Init intialises a geometric distribution
-func (g *Geometric) Init(p float64) {
+func (g *Geometric) Init(p float64) error {
 	if p < 0 || p > 1 {
-		panic("")
+		return util.ErrGeometricParam
 	}
 	g.P, g.Q = p, 1-p
+	return nil
 }
 
 // Generate creates one sample of a geometric distribution

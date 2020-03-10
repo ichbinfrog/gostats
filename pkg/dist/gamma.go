@@ -4,6 +4,9 @@ import (
 	"fmt"
 	"math"
 	"math/rand"
+
+	"github.com/ichbinfrog/statistics/pkg/util"
+	"gonum.org/v1/gonum/mathext"
 )
 
 // Gamma represents a gamme distribution
@@ -18,10 +21,6 @@ type Gamma struct {
 
 // Generate creates one sample of the Gamma distribution
 func (g *Gamma) Generate() float64 {
-	if g.Beta <= 0 {
-		panic("")
-	}
-
 	// Direct method
 	if g.Beta < 6 {
 		x := 1.0
@@ -60,11 +59,12 @@ func (g *Gamma) Generate() float64 {
 }
 
 // Init intialises a Bernouilli distribution
-func (g *Gamma) Init(alpha, beta float64) {
+func (g *Gamma) Init(alpha, beta float64) error {
 	if alpha <= 0 || beta <= 0 {
-		panic("")
+		return util.ErrGammaParam
 	}
 	g.Alpha, g.Beta = alpha, beta
+	return nil
 }
 
 // Domain returns the definition domain of the distribution
@@ -76,6 +76,14 @@ func (g *Gamma) Domain() (float64, float64) {
 func (g *Gamma) PMF(x float64) float64 {
 	lg, _ := math.Lgamma(g.Alpha)
 	return (math.Pow(g.Beta, g.Alpha) * math.Exp(-g.Beta*x) * math.Pow(x, g.Alpha-1)) / lg
+}
+
+// CDF returns the Cumulative distribution function value of a given k
+func (g *Gamma) CDF(x float64) float64 {
+	if x < 0 {
+		return 0
+	}
+	return mathext.GammaIncReg(g.Alpha, x*g.Beta)
 }
 
 // Mean returns the mean of the distribution

@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"math"
 	"math/rand"
+
+	"github.com/ichbinfrog/statistics/pkg/util"
 )
 
 // Uniform represents the continuous uniform distribution
@@ -24,11 +26,12 @@ func (u *Uniform) Generate() float64 {
 }
 
 // Init initialises the uniform distribution
-func (u *Uniform) Init(a, b float64) {
+func (u *Uniform) Init(a, b float64) error {
 	if a > b {
-		panic("")
+		return util.ErrUniformParam
 	}
 	u.A, u.B = a, b
+	return nil
 }
 
 // Domain returns the definition domain of the distribution

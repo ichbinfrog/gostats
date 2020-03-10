@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"math"
 	"math/rand"
+
+	"github.com/ichbinfrog/statistics/pkg/util"
 )
 
 // Bernouilli represents the Bernouilli distribution
@@ -20,11 +22,12 @@ type Bernouilli struct {
 }
 
 // Init intialises a Bernouilli distribution
-func (b *Bernouilli) Init(p float64) {
+func (b *Bernouilli) Init(p float64) error {
 	if p < 0 || p > 1 {
-		panic("")
+		return util.ErrBernouilliParam
 	}
 	b.P, b.Q = p, 1-p
+	return nil
 }
 
 // Domain returns the definition domain of the distribution

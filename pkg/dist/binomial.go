@@ -5,6 +5,9 @@ import (
 	"math"
 	"math/big"
 	"math/rand"
+
+	"github.com/ichbinfrog/statistics/pkg/util"
+	"gonum.org/v1/gonum/mathext"
 )
 
 // Binomial represents the Binomial distribution
@@ -107,11 +110,12 @@ func BinomialCoeff(n, k int) int64 {
 }
 
 // Init intialises a Bernouilli distribution
-func (b *Binomial) Init(n, p float64) {
-	if p < 0 || p > 1 || n < 0 {
-		panic("")
+func (b *Binomial) Init(n, p float64) error {
+	if p < 0 || p > 1 || n <= 0 {
+		return util.ErrBinomialParam
 	}
 	b.N, b.P, b.Q = n, p, 1-p
+	return nil
 }
 
 // Domain returns the definition domain of the distribution
@@ -122,6 +126,18 @@ func (b *Binomial) Domain() (float64, float64) {
 // PMF returns the probability mass function value of a given k
 func (b *Binomial) PMF(k float64) float64 {
 	return float64(BinomialCoeff(int(b.N), int(k))) * math.Pow(b.P, k) * math.Pow(b.Q, float64(b.N)-k)
+}
+
+// CDF returns the Cumulative distribution function value of a given k
+func (b *Binomial) CDF(k float64) float64 {
+	if k < 0 {
+		return 0
+	}
+	if k >= b.N {
+		return 1
+	}
+	k = math.Floor(k)
+	return mathext.RegIncBeta(b.N-x, x+1, b.Q)
 }
 
 // Mean returns the mean of the distribution

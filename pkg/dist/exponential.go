@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"math"
 	"math/rand"
+
+	"github.com/ichbinfrog/statistics/pkg/util"
 )
 
 // Exponential represents a exponential distribution
@@ -19,11 +21,12 @@ type Exponential struct {
 }
 
 // Init intialises a Bernouilli distribution
-func (e *Exponential) Init(lambda float64) {
+func (e *Exponential) Init(lambda float64) error {
 	if lambda <= 0 {
-		panic("")
+		return util.ErrExponentialParam
 	}
 	e.Lambda = lambda
+	return nil
 }
 
 // Generate creates one sample of an exponential distribution

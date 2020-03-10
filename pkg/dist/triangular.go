@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"math"
 	"math/rand"
+
+	"github.com/ichbinfrog/statistics/pkg/util"
 )
 
 // Triangular represents the discreet triangular distribution
@@ -20,12 +22,12 @@ type Triangular struct {
 }
 
 // Init intialises a Bernouilli distribution
-func (t *Triangular) Init(a, b, c float64) {
+func (t *Triangular) Init(a, b, c float64) error {
 	if b >= c && c >= a && b > a {
 		t.A, t.B, t.C = a, b, c
-	} else {
-		panic("")
+		return nil
 	}
+	return util.ErrTriangularParam
 }
 
 // Generate creates one sample of the Triangular distribution

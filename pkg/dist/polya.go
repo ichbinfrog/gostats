@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"math"
 	"math/rand"
+
+	"github.com/ichbinfrog/statistics/pkg/util"
 )
 
 // Polya represents the Polya distribution
@@ -18,11 +20,12 @@ type Polya struct {
 }
 
 // Init intialises a Bernouilli distribution
-func (p *Polya) Init(r, prob float64) {
-	if prob < 0 || prob > 1 || r < 0 {
-		panic("")
+func (p *Polya) Init(r, prob float64) error {
+	if prob < 0 || prob > 1 || r <= 0 {
+		return util.ErrPolyaParam
 	}
 	p.R, p.P, p.Q = r, prob, 1-prob
+	return nil
 }
 
 // Generate creates one sample of a geometric distribution
