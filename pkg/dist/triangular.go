@@ -1,6 +1,10 @@
 package dist
 
-import "math"
+import (
+	"fmt"
+	"math"
+	"math/rand"
+)
 
 // Triangular represents the discreet triangular distribution
 // probability distribution function as follows:
@@ -22,6 +26,15 @@ func (t *Triangular) Init(a, b, c float64) {
 	} else {
 		panic("")
 	}
+}
+
+// Generate creates one sample of the Triangular distribution
+func (t *Triangular) Generate() float64 {
+	u := rand.Float64()
+	if 0 < u && u < t.CDF(u) {
+		return t.A + math.Sqrt(u*(t.B-t.A)*(t.C-t.A))
+	}
+	return t.B - math.Sqrt((1-u)*(t.B-t.A)*(t.B-t.C))
 }
 
 // Domain returns the definition domain of the distribution
@@ -96,4 +109,19 @@ func (t *Triangular) Entropy() float64 {
 // Moment returns the t-th moment of the distribution
 func (t *Triangular) Moment(k float64) float64 {
 	return 2 * ((t.B-t.C)*math.Exp(t.A*k) - (t.B-t.A)*math.Exp(t.C*k) + (t.C-t.A)*math.Exp(t.B*k)) / ((t.B - t.A) * (t.C - t.A) * (t.B - t.C) * math.Pow(k, 2))
+}
+
+// Summary returns a string summarising basic info about the distribution
+func (t *Triangular) Summary() string {
+	dbeg, dend := t.Domain()
+	return fmt.Sprintf(`
+	X ~ B(%f, %f, %f)
+		Domain:		{ %f , %f }
+		Mean: 		%f
+		Median: 	%f
+		Var: 		%f
+		Skewness: 	%f
+		Kurtosis:	%f
+		Entropy:	%f
+`, t.A, t.B, t.C, dbeg, dend, t.Mean(), t.Median(), t.Var(), t.Skewness(), t.Kurtosis(), t.Entropy())
 }
