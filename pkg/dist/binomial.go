@@ -137,7 +137,7 @@ func (b *Binomial) CDF(k float64) float64 {
 		return 1
 	}
 	k = math.Floor(k)
-	return mathext.RegIncBeta(b.N-x, x+1, b.Q)
+	return mathext.RegIncBeta(b.N-k, k+1, b.Q)
 }
 
 // Mean returns the mean of the distribution
