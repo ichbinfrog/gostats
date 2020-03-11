@@ -14,7 +14,7 @@ func init() {
 }
 
 func populate(a *Arrayf64, n int) {
-	for i := 0; i <= n; i++ {
+	for i := 0; i < n; i++ {
 		a.Insert(rand.Float64() * 10)
 	}
 }
