@@ -41,6 +41,7 @@ func Factorial(n int) int64 {
 
 // Generate creates one sample of the Poisson distribution
 func (p *Poisson) Generate() float64 {
+	// PRESS, William H., TEUKOLSKY, Saul A., VETTERLING, William T., et al. Numerical recipes in C. 1988.
 	var em, t float64
 
 	// Direct method

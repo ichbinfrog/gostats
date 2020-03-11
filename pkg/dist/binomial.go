@@ -23,6 +23,7 @@ type Binomial struct {
 
 // Generate creates one sample of the Bernouilli distribution
 func (b *Binomial) Generate() float64 {
+	// PRESS, William H., TEUKOLSKY, Saul A., VETTERLING, William T., et al. Numerical recipes in C. 1988.
 	p := b.P
 	if b.P > .5 {
 		p = b.Q

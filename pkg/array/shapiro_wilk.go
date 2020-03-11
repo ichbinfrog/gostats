@@ -31,6 +31,7 @@ func swilkSecondPolynomial(n, u float64) float64 {
 }
 
 func (a *Arrayf64) ShapiroWilk() float64 {
+	// ROYSTON, Patrick. Remark AS R94: A remark on algorithm AS 181: The W-test for normality. Journal of the Royal Statistical Society. Series C (Applied Statistics), 1995, vol. 44, no 4, p. 547-551.
 	n := int(a.Length)
 	m := make([]float64, n)
 	d := dist.Normal{}

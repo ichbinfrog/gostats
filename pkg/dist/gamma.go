@@ -21,6 +21,7 @@ type Gamma struct {
 
 // Generate creates one sample of the Gamma distribution
 func (g *Gamma) Generate() float64 {
+	// PRESS, William H., TEUKOLSKY, Saul A., VETTERLING, William T., et al. Numerical recipes in C. 1988.
 	// Direct method
 	if g.Beta < 6 {
 		x := 1.0
