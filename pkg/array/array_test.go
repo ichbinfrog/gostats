@@ -19,6 +19,16 @@ func populate(a *Arrayf64, n int) {
 	}
 }
 
+func TestSwilk(b *testing.T) {
+	a := Arrayf64{}
+	a.Init(Optionf64{
+		Degree: 4,
+	})
+	a.InsertSlice([]float64{38.7, 41.5, 43.8, 44.5, 45.5, 46.0, 47.7, 58.0})
+	log.Println(a.Data)
+	log.Println(a.ShapiroWilk())
+}
+
 func TestSigmoid(b *testing.T) {
 	a := Arrayf64{}
 	a.Init(Optionf64{

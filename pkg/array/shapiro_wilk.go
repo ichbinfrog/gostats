@@ -30,7 +30,8 @@ func swilkSecondPolynomial(n, u float64) float64 {
 	return p2_0*math.Pow(u, 5) + p2_1*math.Pow(u, 4) + p2_2*math.Pow(u, 3) + p2_3*math.Pow(u, 2) + p2_4*u + n
 }
 
-// ShapiroWilk implements AS R94 in Golang (WIP)
+// ShapiroWilk implements AS R94 in Golang
+// TODO: Document + Optimise
 func (a *Arrayf64) ShapiroWilk() float64 {
 	// ROYSTON, Patrick. Remark AS R94: A remark on algorithm AS 181: The W-test for normality. Journal of the Royal Statistical Society. Series C (Applied Statistics), 1995, vol. 44, no 4, p. 547-551.
 	n := int(a.Length)
@@ -38,23 +39,27 @@ func (a *Arrayf64) ShapiroWilk() float64 {
 	d := dist.Normal{}
 	d.Init(0, 1)
 
-	sum := 0.0
-	for i := 0; i < n; i++ {
-		m[i] = d.Quantile(((float64(i + 1)) - (3 / 8)) / (float64(n) + .25))
-		sum += math.Pow(m[i], 2)
+	if a.Length < 3 {
+		return math.NaN()
 	}
 
-	// Normalise by square root
+	sum := 0.0
+	for i := 0; i < n; i++ {
+		m[i] = d.Quantile(((float64(i + 1)) - (3.0 / 8.0)) / (float64(n) + .25))
+		sum += math.Pow(m[i], 2)
+	}
 	sqrtSum := math.Sqrt(sum)
+
+	// Normalise by square root
 	w := make([]float64, n)
 	k := a.Kurtosis()
+	for i := 0; i < int(a.Length); i++ {
+		w[i] = m[i] / sqrtSum
+	}
 
 	W := 0.0
 	if k > 3.0 {
 		// Shapiro-Francia test for leptokurtic samples
-		for i := 0; i < int(a.Length); i++ {
-			w[i] = m[i] / sqrtSum
-		}
 	} else {
 		// Shapiro-Wilk test for platykurtic samples
 		if n == 3 {
