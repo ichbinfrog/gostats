@@ -30,6 +30,7 @@ func swilkSecondPolynomial(n, u float64) float64 {
 	return p2_0*math.Pow(u, 5) + p2_1*math.Pow(u, 4) + p2_2*math.Pow(u, 3) + p2_3*math.Pow(u, 2) + p2_4*u + n
 }
 
+// ShapiroWilk implements AS R94 in Golang (WIP)
 func (a *Arrayf64) ShapiroWilk() float64 {
 	// ROYSTON, Patrick. Remark AS R94: A remark on algorithm AS 181: The W-test for normality. Journal of the Royal Statistical Society. Series C (Applied Statistics), 1995, vol. 44, no 4, p. 547-551.
 	n := int(a.Length)
