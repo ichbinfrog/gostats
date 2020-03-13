@@ -18,7 +18,7 @@ type Poisson struct {
 	Lambda float64
 }
 
-// Init intialises a Bernouilli distribution
+// Init intialises a Bernoulli distribution
 func (p *Poisson) Init(lambda float64) error {
 	if lambda < 0 {
 		return util.ErrPoissonParam

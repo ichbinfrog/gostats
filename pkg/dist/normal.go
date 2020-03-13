@@ -16,7 +16,7 @@ type Normal struct {
 	Mu, Sigma float64
 }
 
-// Init intialises a Bernouilli distribution
+// Init intialises a Bernoulli distribution
 func (n *Normal) Init(mu, sigma float64) error {
 	if sigma <= 0 {
 		return util.ErrNormalParam

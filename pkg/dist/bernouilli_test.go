@@ -5,8 +5,8 @@ import (
 	"testing"
 )
 
-func TestBernouilli(t *testing.T) {
-	dist := &Bernouilli{}
+func TestBernoulli(t *testing.T) {
+	dist := &Bernoulli{}
 	dist.Init(.3)
 	fmt.Println(dist.Summary())
 

@@ -15,7 +15,7 @@ type Chisq struct {
 	Degree float64
 }
 
-// Generate creates one sample of the Bernouilli distribution
+// Generate creates one sample of the Bernoulli distribution
 func (c *Chisq) Generate() float64 {
 	g := Gamma{}
 	if err := g.Init(c.Degree/2, .5); err != nil {

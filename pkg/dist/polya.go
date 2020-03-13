@@ -19,7 +19,7 @@ type Polya struct {
 	R, P, Q float64
 }
 
-// Init intialises a Bernouilli distribution
+// Init intialises a Bernoulli distribution
 func (p *Polya) Init(r, prob float64) error {
 	if prob < 0 || prob > 1 || r <= 0 {
 		return util.ErrPolyaParam

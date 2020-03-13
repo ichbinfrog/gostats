@@ -21,7 +21,7 @@ type Triangular struct {
 	A, B, C float64
 }
 
-// Init intialises a Bernouilli distribution
+// Init intialises a Bernoulli distribution
 func (t *Triangular) Init(a, b, c float64) error {
 	if b >= c && c >= a && b > a {
 		t.A, t.B, t.C = a, b, c

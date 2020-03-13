@@ -42,7 +42,7 @@ func (a *Arrayf64) Min() float64 {
 //		array.Data[array.Length - 1]
 //
 // Complexity:
-// =	1 memory access + 1 float64-int substraction
+// =	1 memory access + 1 float64-int subtraction
 // ~	O(1)
 //
 func (a *Arrayf64) Max() float64 {

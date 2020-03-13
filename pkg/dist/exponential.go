@@ -20,7 +20,7 @@ type Exponential struct {
 	Lambda float64
 }
 
-// Init intialises a Bernouilli distribution
+// Init intialises a Bernoulli distribution
 func (e *Exponential) Init(lambda float64) error {
 	if lambda <= 0 {
 		return util.ErrExponentialParam

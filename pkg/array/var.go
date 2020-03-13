@@ -9,9 +9,9 @@ import "math"
 //
 // Complexity:
 // 	=	1 memory access + 1 float64-float64 substration + 1 math.Pow(float64, 2)
-//		+ 1 memory access + 1 float64-int division + 1 float64-float64 division + 1 float64-int substraction
-//	=   2 memory access + 2 substraction + 2 division + 1 math.Pow(float64,2)
-//  =   2 memory access + 2 substraction + 2 division + 1 63 bit shift
+//		+ 1 memory access + 1 float64-int division + 1 float64-float64 division + 1 float64-int subtraction
+//	=   2 memory access + 2 subtraction + 2 division + 1 math.Pow(float64,2)
+//  =   2 memory access + 2 subtraction + 2 division + 1 63 bit shift
 //  ~ 	O(1)
 //
 func (a *Arrayf64) Var() float64 {
@@ -39,7 +39,7 @@ func (a *Arrayf64) Stddev() float64 {
 //		q3 - q1
 //
 // Complexity:
-// =	2 quantile + 1 float64-float64 substraction
+// =	2 quantile + 1 float64-float64 subtraction
 // ~	2 * O(1) + O(1)
 // ~	O(1)
 //

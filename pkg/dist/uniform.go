@@ -20,7 +20,7 @@ type Uniform struct {
 	A, B float64
 }
 
-// Generate creates one sample of the Bernouilli distribution
+// Generate creates one sample of the Bernoulli distribution
 func (u *Uniform) Generate() float64 {
 	return rand.Float64()*(u.B-u.A) + u.A
 }

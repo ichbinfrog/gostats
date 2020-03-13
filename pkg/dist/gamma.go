@@ -59,7 +59,7 @@ func (g *Gamma) Generate() float64 {
 	}
 }
 
-// Init intialises a Bernouilli distribution
+// Init intialises a Bernoulli distribution
 func (g *Gamma) Init(alpha, beta float64) error {
 	if alpha <= 0 || beta <= 0 {
 		return util.ErrGammaParam

@@ -21,7 +21,7 @@ type Binomial struct {
 	N, P, Q float64
 }
 
-// Generate creates one sample of the Bernouilli distribution
+// Generate creates one sample of the Bernoulli distribution
 func (b *Binomial) Generate() float64 {
 	// PRESS, William H., TEUKOLSKY, Saul A., VETTERLING, William T., et al. Numerical recipes in C. 1988.
 	p := b.P
@@ -110,7 +110,7 @@ func BinomialCoeff(n, k int) int64 {
 	return r1.Div(r1, r2.Mul(r2, r3)).Int64()
 }
 
-// Init intialises a Bernouilli distribution
+// Init intialises a Bernoulli distribution
 func (b *Binomial) Init(n, p float64) error {
 	if p < 0 || p > 1 || n <= 0 {
 		return util.ErrBinomialParam
