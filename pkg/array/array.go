@@ -24,6 +24,11 @@ func init() {
 	AggregateMap = make(map[string]Aggregate)
 }
 
+type Mode struct {
+	Value float64 `json:"value"`
+	Count int     `json:"count"`
+}
+
 // Optionf64 represents the Option group to select which
 // variable to accelerate
 type Optionf64 struct {
@@ -39,6 +44,8 @@ type Arrayf64 struct {
 	Sum       []float64          `json:"sum"`
 	Data      []float64          `json:"data"`
 	Aggregate map[string]float64 `json:"aggregate"`
+	MaxMode   Mode               `json:"maxMode"`
+	CurrMode  Mode               `json:"currMode"`
 }
 
 // Init allocates the Sum array with a given degree
@@ -47,6 +54,14 @@ func (a *Arrayf64) Init(opt Optionf64) {
 	a.Sum = make([]float64, opt.Degree)
 	a.Aggregate = make(map[string]float64)
 
+	a.MaxMode = Mode{
+		Value: math.NaN(),
+		Count: 0,
+	}
+	a.CurrMode = Mode{
+		Value: math.NaN(),
+		Count: 0,
+	}
 	if opt.Geometric {
 		AggregateMap["geometric"] = Aggregate{
 			Iterative: geometricAdd,
@@ -73,8 +88,8 @@ func (a *Arrayf64) Init(opt Optionf64) {
 //
 // Complexity:
 //		O(Aggregate update) + O(index find) + O(shift slice) + O(insert)
-//		= O(1) + O(n) + O(n) + O(1)
-//		= O(n)
+//		= O(1) + O(nlog(n)) + O(nlog(n)) + O(1)
+//		= O(nlog(n))
 //
 func (a *Arrayf64) Insert(val float64) {
 	for i := 0; i < a.Option.Degree; i++ {
@@ -93,6 +108,35 @@ func (a *Arrayf64) Insert(val float64) {
 	a.Data = append(a.Data, 0)
 	copy(a.Data[index+1:], a.Data[index:])
 	a.Data[index] = val
+
+	// Mode update
+	if a.MaxMode.Value == math.NaN() {
+		a.MaxMode.Value = val
+	}
+	if a.MaxMode.Value == val {
+		a.MaxMode.Count++
+	} else {
+		if a.CurrMode.Value != val {
+			count := 0
+			n := int(a.Length)
+			for {
+				index++
+				if index >= n {
+					break
+				}
+				if a.Data[index] == val {
+					count++
+				}
+			}
+			a.CurrMode.Value = val
+			a.CurrMode.Count = count
+		}
+		a.CurrMode.Count++
+
+		if a.CurrMode.Count > a.MaxMode.Count {
+			a.MaxMode = a.CurrMode
+		}
+	}
 }
 
 // InsertSlice inserts a slice of float64 value in the sorted array
@@ -150,6 +194,7 @@ func (a *Arrayf64) apply(f func(float64) float64, update bool) {
 	for k := range a.Aggregate {
 		a.Aggregate[k] = AggregateMap[k].Summation(true)
 	}
+	a.Mode(true)
 }
 
 // DeepCopy returns a pointer of an exact copy of an array

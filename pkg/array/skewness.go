@@ -32,7 +32,7 @@ func (a *Arrayf64) Skewness(s skewnessMeasure) float64 {
 	case PearsonSecond:
 		return 3 * (a.Mean() - a.Median()/a.Stddev())
 	case PearsonFirst:
-		return (a.Mean() - a.Mode()) / a.Stddev()
+		return (a.Mean() - a.Mode(false)) / a.Stddev()
 	default:
 		return 0
 	}

@@ -35,13 +35,14 @@ a.Summary()             // Prints statistics with O(n) garantee
 |         Stddev()        |      O(1)     |         iterative insert        |
 |          Min()          |      O(1)     |           sorted array          |
 |          Max()          |      O(1)     |           sorted array          |
+|          Mode()         |      O(1)     |         iterative insert        |
 |  Quantile() or Median() |      O(1)     |           sorted array          |
 |      GeometricMean()    |      O(1)     |         iterative insert        |
 |       HarmonicMean()    |      O(1)     |         iterative insert        |
 |        Entropy()        |      O(n)     |                                 |
 |      Skewness(Yule)     |      O(1)     |                                 |
 | Skewness(PearsonSecond) |      O(1)     |                                 |
-|  Skewness(PearsonFirst) | O(card(mode)) |                                 |
+|  Skewness(PearsonFirst) |      O(1)     |         iterative insert        |
 |        Kurtosis()       |      O(n)     |                                 |
 |      ShapiroWilk()      |      O(n)     | ROYSTON, Patrick. Remark AS R94 |
 
@@ -49,8 +50,8 @@ a.Summary()             // Prints statistics with O(n) garantee
 
 |  operation  |  complexity |
 |:-----------:|:-----------:|
-|    Insert   |  O(nlog(n)) |
-| InsertSlice | O(mnlog(n)) |
+|    Insert   |  max{ O(nlog(n)) , O(card(mode)) }|
+| InsertSlice | O(m max { nlog(n), card(mode) } ) |
 |      At     |     O(1)    |
 |    Remove   |  O(nlog(n)) |
 |   DeepCopy  |     O(n)    |

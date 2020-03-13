@@ -58,6 +58,18 @@ func TestAggregate(b *testing.T) {
 	log.Println(a.HarmonicMean(false))
 }
 
+func TestMode(b *testing.T) {
+	a := Arrayf64{}
+	a.Init(Optionf64{
+		Degree: 2,
+	})
+	a.InsertSlice([]float64{1, 1, 1, 1, 2, 2, 2, 2, 2.2, 3, 2, 2, 2, 3, 5})
+	log.Println(a.Mode(false))
+	a.apply(func(v float64) float64 { return v + 1 }, true)
+	log.Println(a.Data)
+	log.Println(a.Mode(false))
+}
+
 func TestArray(b *testing.T) {
 	a := Arrayf64{}
 	a.Init(Optionf64{
