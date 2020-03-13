@@ -1,5 +1,7 @@
 # gostats : efficient statistics array for golang
 
+[![Go Report Card](https://goreportcard.com/badge/ichbinfrog/gostats)](https://goreportcard.com/report/github.com/ichbinfrog/gostats) [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/ichbinfrog/gostats/blob/master/LICENSE) [![GoDoc](https://godoc.org/github.com/ichbinfrog/gostats?status.svg)](https://godoc.org/github.com/ichbinfrog/gostats) 
+
 Gostats is a package that attempts to create an efficient float64 array for statistics aggregation. The main goal being to optimise elemental operations (mean, variance, skewness, quantiles) to an O(1) complexity and piggy-back off said complexity to optimise higher order statistics operations. 
 
 The `Arrayf64` is ultimately a wrapper around a `[]float64` which, at the cost of an `O(nlog(n))` insert complexity and the order of said insert, optimises the computation of all statistics.

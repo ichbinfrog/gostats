@@ -6,7 +6,7 @@ import (
 )
 
 var (
-	// AggregateMap stores the funciton associated with the unmutable
+	// AggregateMap stores the function associated with the unmutable
 	// statistic aggregate. Unmutable here meaning that the applying
 	// changes to the underlying array would require recomputing
 	// the entire aggregate instead of the single change.
@@ -24,6 +24,7 @@ func init() {
 	AggregateMap = make(map[string]Aggregate)
 }
 
+// Mode associates a value to the number of occurrences in the array
 type Mode struct {
 	Value float64 `json:"value"`
 	Count int     `json:"count"`
