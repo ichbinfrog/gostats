@@ -24,9 +24,9 @@ func TestSwilk(b *testing.T) {
 	a.Init(Optionf64{
 		Degree: 4,
 	})
-	a.InsertSlice([]float64{38.7, 41.5, 43.8, 44.5, 45.5, 46.0, 47.7, 58.0})
-	log.Println(a.Data)
-	log.Println(a.ShapiroWilk())
+	populate(&a, 4000)
+	W := a.ShapiroWilkStatistic()
+	log.Println(W, ShapiroWilkSignificance(a.Length, W))
 }
 
 func TestSigmoid(b *testing.T) {

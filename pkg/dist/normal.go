@@ -42,7 +42,7 @@ func (n *Normal) PMF(x float64) float64 {
 
 // CDF returns the Cumulative distribution function value of a given k
 func (n *Normal) CDF(x float64) float64 {
-	return (1 + math.Erf((x-n.Mu)/(n.Sigma*math.Sqrt(2))))
+	return (.5 + .5*math.Erf((x-n.Mu)/(n.Sigma*math.Sqrt(2))))
 }
 
 // Mean returns the mean of the distribution
