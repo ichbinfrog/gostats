@@ -19,7 +19,7 @@ func init() {
 
 func BenchmarkMatrix(t *testing.B) {
 	var data [][]float64
-	for i := 1; i < 4; i++ {
+	for i := 1; i < 5; i++ {
 		d := dist.Normal{}
 		d.Init(0, 1)
 
@@ -37,9 +37,18 @@ func BenchmarkMatrix(t *testing.B) {
 			Data:       data,
 			Transposed: false,
 		}
+
 		B := A
-		t.Run(fmt.Sprintf("normal_%d", n), func(t *testing.B) {
-			Mult(A, B)
+		t.Run(fmt.Sprintf("naive_%d", n), func(t *testing.B) {
+			NaiveMult(A, B)
+		})
+
+		t.Run(fmt.Sprintf("parallel_row_%d", n), func(t *testing.B) {
+			ParallelRowMult(A, B)
+		})
+
+		t.Run(fmt.Sprintf("strassen_%d", n), func(t *testing.B) {
+			StrassenMult(A, B)
 		})
 	}
 
