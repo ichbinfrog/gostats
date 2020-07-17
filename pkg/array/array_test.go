@@ -84,7 +84,7 @@ func TestArray(b *testing.T) {
 }
 
 func BenchmarkArraySummary(b *testing.B) {
-	for i := 1; i < 8; i++ {
+	for i := 1; i < 7; i++ {
 		a := Arrayf64{}
 		a.Init(Optionf64{
 			Degree: 4,
@@ -106,7 +106,7 @@ func BenchmarkArrayApply(b *testing.B) {
 	}
 
 	for name, funct := range functions {
-		for i := 1; i <= 5; i++ {
+		for i := 1; i <= 6; i++ {
 			a := Arrayf64{}
 			a.Init(Optionf64{
 				Degree: 2,

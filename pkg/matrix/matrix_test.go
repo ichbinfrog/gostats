@@ -1,21 +1,46 @@
 package matrix
 
 import (
-	"log"
+	"fmt"
+	"math"
+	"syscall"
 	"testing"
+
+	"github.com/ichbinfrog/statistics/pkg/dist"
 )
 
-func TestMatrix(t *testing.T) {
-	m := &Matrix{
-		height:     3,
-		width:      3,
-		Data:       [][]float64{[]float64{1, 2, 3}, []float64{1, 2, 3}, []float64{1, 2, 3}},
-		Transposed: false,
+func init() {
+	var rlimit syscall.Rlimit
+	syscall.Getrlimit(syscall.RLIMIT_DATA, &rlimit)
+	rlimit.Max = rlimit.Max / 2
+	rlimit.Cur = rlimit.Cur / 4
+	syscall.Setrlimit(syscall.RLIMIT_AS, &rlimit)
+}
+
+func BenchmarkMatrix(t *testing.B) {
+	var data [][]float64
+	for i := 1; i < 4; i++ {
+		d := dist.Normal{}
+		d.Init(0, 1)
+
+		n := int(math.Pow10(i))
+		data = make([][]float64, n)
+		for j := 0; j < n; j++ {
+			data[j] = make([]float64, n)
+			for k := 0; k < n; k++ {
+				data[j][k] = d.Generate()
+			}
+		}
+		A := &Matrixf64{
+			height:     8,
+			width:      8,
+			Data:       data,
+			Transposed: false,
+		}
+		B := A
+		t.Run(fmt.Sprintf("normal_%d", n), func(t *testing.B) {
+			Mult(A, B)
+		})
 	}
-	n := m
-	log.Println(m)
-	Add(m, n, true)
-	log.Println(m)
-	Mult(m, n, true)
-	log.Println(m)
+
 }
